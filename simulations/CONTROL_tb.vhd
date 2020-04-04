@@ -1,3 +1,5 @@
+--The purpose of this testbench is to check the connectivity between the 2 submodules main control and alu control and the fucntinality of the whole module
+
 library IEEE;
 use IEEE.Std_logic_1164.all;
 use IEEE.Numeric_Std.all;
@@ -51,7 +53,7 @@ begin
 
   stimulus: process
   begin
-  
+  --This testbench checks all of the opcodes and func given by the isa to check whether the right control signals for each instruction of the isa are produced or not
    wait for 100ns;
    --add
    Instr<="10000000000000000000000000110000";
