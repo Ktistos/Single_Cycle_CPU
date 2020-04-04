@@ -1,37 +1,7 @@
---------------------------------------------------------------------------------
--- Company: 
--- Engineer:
---
--- Create Date:   18:14:30 02/27/2020
--- Design Name:   
--- Module Name:   /home/dbanelas/Documents/14.7/ISE_DS/CPU_wannabe/register_tb.vhd
--- Project Name:  CPU_wannabe
--- Target Device:  
--- Tool versions:  
--- Description:   
--- 
--- VHDL Test Bench Created by ISE for module: Register32bit
--- 
--- Dependencies:
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
---
--- Notes: 
--- This testbench has been automatically generated using types std_logic and
--- std_logic_vector for the ports of the unit under test.  Xilinx recommends
--- that these types always be used for the top-level I/O of a design in order
--- to guarantee that the testbench will bind correctly to the post-implementation 
--- simulation model.
---------------------------------------------------------------------------------
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
- 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---USE ieee.numeric_std.ALL;
- 
+
 ENTITY register_tb IS
 END register_tb;
  
@@ -84,6 +54,7 @@ BEGIN
    end process;
  
 
+   -- testing the functionality of a 32 bit register
    -- Stimulus process
    stim_proc: process
    begin		
