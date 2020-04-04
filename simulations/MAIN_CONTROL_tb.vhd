@@ -51,7 +51,7 @@ begin
 
   stimulus: process
   begin
-  
+  --Checking all the opcodes provided by the ISA to ensure that the correct control signals are produced
     wait for 100ns;
     --testing r-type instructions
     OpCode<="100000";
