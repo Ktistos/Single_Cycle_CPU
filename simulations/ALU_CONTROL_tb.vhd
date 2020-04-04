@@ -1,3 +1,5 @@
+--The purpose of this testbench is to check if the alu control module is working properly.
+  
 library IEEE;
 use IEEE.Std_logic_1164.all;
 use IEEE.Numeric_Std.all;
@@ -27,21 +29,19 @@ begin
 
   stimulus: process
   begin
-  
+  --expecting to see that the ALU_ctr corresponds to the right func or ALUop  
     wait for 100ns;
     
     ALUop<="100";
-    --tesing all alu_ctr signals for r-type instructions
+    --testing all alu_ctr signals for all r-type instructions(all the combinations of func that are provided by the isa)
     for i in 48 to 54 loop
         Func<=std_logic_vector(to_unsigned(i,Func'length));
         wait for 100ns;
     end loop;
-    
     for i in 56 to 60 loop
         Func<=std_logic_vector(to_unsigned(i,Func'length));
         wait for 100ns;
     end loop;
-    
     
     --testing alu_ctr for other instructions
     
@@ -69,3 +69,4 @@ begin
 
 
 end;
+

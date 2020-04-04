@@ -1,35 +1,6 @@
---------------------------------------------------------------------------------
--- Company: 
--- Engineer:
---
--- Create Date:   17:18:33 03/17/2020
--- Design Name:   
--- Module Name:   /home/dbanelas/Documents/14.7/ISE_DS/CPU_wannabe/RAM_tb.vhd
--- Project Name:  CPU_wannabe
--- Target Device:  
--- Tool versions:  
--- Description:   
--- 
--- VHDL Test Bench Created by ISE for module: RAM
--- 
--- Dependencies:
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
---
--- Notes: 
--- This testbench has been automatically generated using types std_logic and
--- std_logic_vector for the ports of the unit under test.  Xilinx recommends
--- that these types always be used for the top-level I/O of a design in order
--- to guarantee that the testbench will bind correctly to the post-implementation 
--- simulation model.
---------------------------------------------------------------------------------
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
- 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
 USE ieee.numeric_std.ALL;
  
 ENTITY RAM_tb IS
@@ -92,7 +63,7 @@ BEGIN
    -- Stimulus process
    stim_proc: process
    begin		
-   
+   --since it is difficult to test ram functionality for all the addresses we check it for a small subset 
       wait for 100ns;
 
       --reading the first 31/2047 fields
@@ -109,13 +80,13 @@ BEGIN
             data_din<=std_logic_vector(to_unsigned(Z,data_din'length));
            wait for clk_period;
       end loop;
-      
+      --writing in the fields 1498-1502
       for Z in 1498 to 1502 loop
             data_addr<=std_logic_vector(to_unsigned(Z,data_addr'length));
             data_din<=std_logic_vector(to_unsigned(Z,data_din'length));
            wait for clk_period;
       end loop;
-      
+      --writing in the fields 2044-2047
       for Z in 2044 to 2047 loop
             data_addr<=std_logic_vector(to_unsigned(Z,data_addr'length));
             data_din<=std_logic_vector(to_unsigned(Z,data_din'length));
@@ -129,10 +100,7 @@ BEGIN
       data_din<=x"ffffffff";
       wait for clk_period;
       
-      
-      
-      
-      
+      --reading data from random positions that were previously written
       data_addr<=std_logic_vector(to_unsigned(1024,data_addr'length));
       wait for clk_period;
       
@@ -143,7 +111,6 @@ BEGIN
       data_addr<=std_logic_vector(to_unsigned(2047,data_addr'length));
       wait for clk_period;
       
-            
 
       -- insert stimulus here 
 

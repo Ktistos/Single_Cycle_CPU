@@ -40,10 +40,10 @@ begin
   begin
   
     wait for 100ns;
-  
+  --resetting all registers
     Reset<='1';
     wait for clk_period*5;
-    
+    --processor is working...
     Reset<='0';
 
     wait;

@@ -1,35 +1,7 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 03/18/2020 11:33:17 PM
--- Design Name: 
--- Module Name: EXSTAGE_tb - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 entity EXSTAGE_tb is
 --  Port ( );
@@ -77,7 +49,8 @@ port map(
 
 stim_proc: process
    begin
-   --CPU has been tested seperately
+
+   --Since the ALU has been already tested seperatly we only need to check whether the connection between the multiplexer and the alu is valid 
    wait for 100ns;
    --addition between RF_A and RF_B
    ALU_func<="0000";

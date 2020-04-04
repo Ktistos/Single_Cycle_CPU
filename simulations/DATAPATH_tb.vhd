@@ -1,38 +1,16 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 03/30/2020 03:43:30 PM
--- Design Name: 
--- Module Name: DATAPATH_tb - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
+--The purpose of this testbench is to check the functionality of instructions that 
+--use different datapath components.
+--It consists of instructions that test all of the components in the datapath and
+--ensure that the datapath submodules are properly connected.
 ----------------------------------------------------------------------------------
 
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 entity DATAPATH_tb is
---  Port ( );
+
 end DATAPATH_tb;
 
 architecture Behavioral of DATAPATH_tb is
@@ -164,59 +142,87 @@ port map(
 		CLK <= '1';
 		wait for CLK_period/2;
    end process;
-   
-   --for r type instructions we check alu_out/mem_out mux for the critical path
-   
-   
-   ----Epeidh kathe for meta apo ena wait statement, otan pername times sta control shmata ekeines pernane sto falling edge
-   ----gia na mhn ephreastei o xronos ekteleshs twn entolwn
-   ----Kathe fora pou xreiazetai na allaksoyme ta control shmata ths epomenhs entolhs
-   ----prepei na kleisoume to PC_LdEn ston kyklo ths trexoysas entolhs etsi wste o PC na mhn ananewthei
-   ----kai ston epomeno kyklo na diathrhsei thn trexousa timh.Ston epomeno kyklo kanoyme tis aparaithtes allagew sta shmata control
-   ----kai anoigoume to PC_LdEn etsi wste ston epomeno kyklo na fortwthei h epomenh entolh   
-   
-   --PROBLEM:
-   --After every wait statement the signal values are assigned in the falling edge of the clock.
-   
+
+
+   --After each wait statement the values of input signals actually get assigned on the falling edge of the clock(50 ns after the rising edge).
+   --That is a problem because the clock is set to be 100ns , which means there are only 50 ns left for an instruction to be excecuted.
+   --To overcome this problem each instruction is fetched for 2 clock cycles:
+   --One clock cycle to set the control signals of the instruction and 
+   --another clock cycle to "actually excecute" the instruction.
+   --Some signals that enable data to be written in registers or in the memory are actually set on the instruction's excecution 
+   --to prevent the cycle which sets the control signals to overwrite data.
+   --Since all the duration of all the instructions are over 50 seconds this does not affect the excecution of the instructions.
    
    
    stim_proc: process
    begin
-   --testing every single instruction
    --every value is stored in registers 1 through 5
-   --the instructions are taken from rom.data file
    --data segment of ram is empty-nothing is stored
    wait for 100ns;
+   -- resetting the Rf registers and the program counter
    
-   PC_LdEn<='0';
    Reset<='1';
-   wait for clk_period*2;
-   
-   PC_LdEn<='1';
+   wait for clk_period;
+
+   --closing the reset signal
+
+   Reset<='0';
+
+  
    wait for clk_period;
    
-   --li r1,5
-   --we must see 5 in register r1
-   Reset<='0';
+  -- li control signals
+   
    RF_B_sel<='0';
    ALU_Bin_sel<='1';
    ALU_func<="0011";
    RF_WrData_sel<='0';
-   RF_WrEn<='1';
+   --Actually RF_WrEn<='1' but RF_WrEn<='0' to prevent the control signals cycle from overwritting data
+   RF_WrEn<='0';
+
    PC_Sel<='0';
    ImmExt<="01";
    ByteOp<='0';
    Mem_WrEn<='0';
-   wait for clk_period;
    
-   --li r2,10
-   --we must see 10 in register r2
+   --hold the instruction for one more clock cycle for its excecution.
+   PC_LdEn<='0';
+   wait for clk_period;
+   --instruction excecution
+   --li r1,5
 
-   PC_LdEn<='0'; --instruction with diff control signals incoming
+   --allows data to be altered during the excution cycle
+   RF_WrEn<='1';
+
+   --fetches next instruction
+   PC_LdEn<='1';
+
+   wait for clk_period;
+   -- li control signals
+   RF_B_sel<='0';
+   ALU_Bin_sel<='1';
+   ALU_func<="0011";
+   RF_WrData_sel<='0';
+   RF_WrEn<='0';
+   PC_Sel<='0';
+   ImmExt<="01";
+   ByteOp<='0';
+   Mem_WrEn<='0';
+
+   --hold the instruction for one more clock cycle for its excecution.
+   PC_LdEn<='0';
+   wait for clk_period;
+   --instruction excecution
+   --li r2,10
+   
+   --allows data to be altered during the excution cycle
+   RF_WrEn<='1';
+
+    --fetches next instruction
+   PC_LdEn<='1';
    wait for clk_period;
    
-   --add r3,r2,r1
-   --we sust see 15 in r3
+   --add control signals
    RF_B_sel<='0';
    ALU_Bin_sel<='0';
    ALU_func<="0000";
@@ -227,15 +233,21 @@ port map(
    ByteOp<='0';
    Mem_WrEn<='0';
    
-   PC_LdEn<='1';--new instruction 
+   --hold the instruction for one more clock cycle for its excecution.
+   PC_LdEn<='0'; 
    wait for clk_period;
+   --instruction excecution
+   --add r3,r2,r1 ,expect to see r3 with value 15
    
-   PC_LdEn<='0'; --instruction with diff control signals incoming
+   --allows data to be altered during the excution cycle
    RF_WrEn<='1';
+
+   --fetches next instruction
+   PC_LdEn<='1'; 
    wait for clk_period;
    
-   --not r4,r3
-   --we must see ...1110000 in r4
+   --not control signals
+   
    RF_B_sel<='0';
    ALU_Bin_sel<='0';
    ALU_func<="0100";
@@ -245,55 +257,74 @@ port map(
    ImmExt<="00";
    ByteOp<='0';
    Mem_WrEn<='0';
-   
-   PC_LdEn<='1';--new instruction 
+
+   --hold the instruction for one more clock cycle for its excecution.
+   PC_LdEn<='0';
    wait for clk_period;
    
-   PC_LdEn<='0'; --instruction with diff control signals incoming
+   --instruction excecution
+   --not r4,r3
+   --we must see ...1110000 in r4
+
+   --allows data to be altered during the excution cycle
    RF_WrEn<='1';
+
+   --fetches next instruction
+   PC_LdEn<='1';
    wait for clk_period;
    
+   --beq control signals
+   RF_B_sel<='1';
+   ALU_Bin_sel<='0';
+   ALU_func<="0001";
+   RF_WrData_sel<='0';
+   RF_WrEn<='0';
+   PC_Sel<='0';
+   ImmExt<="10";
+   ByteOp<='0';
+   Mem_WrEn<='0';
+   
+   --hold the instruction for one more clock cycle for its excecution.
+   PC_LdEn<='0';
+   wait for clk_period;
+   --instruction excecution
    --beq r2,r3,x0002
+   --Since r2!=r3 this instruction is destined to fail that's why PC_Sel<='0' b
+
+   --preventing beq instruction from overwriting data
+   RF_WrEn<='0';
+
+   --fetches next instruction
+   PC_LdEn<='1'; 
+   
+   wait for clk_period; 
+   
+   --addi control signals
+
    RF_B_sel<='1';
-   ALU_Bin_sel<='0';
-   ALU_func<="0001";
+   ALU_Bin_sel<='1';
+   ALU_func<="0000";
    RF_WrData_sel<='0';
    RF_WrEn<='0';
    PC_Sel<='0';
-   ImmExt<="10";
+   ImmExt<="01";
    ByteOp<='0';
    Mem_WrEn<='0';
    
-   PC_LdEn<='1';--new instruction 
+   --hold the instruction for one more clock cycle for its excecution.
+   PC_LdEn<='0'; 
    wait for clk_period;
-   
-   PC_LdEn<='0'; --instruction with diff control signals incoming
-   RF_WrEn<='0';
-   wait for clk_period;
-   
-   
-   
+   --instruction excecution
    --addi r2,r2,5
-   RF_B_sel<='1';
-   ALU_Bin_sel<='1';
-   ALU_func<="0000";
-   RF_WrData_sel<='0';
-   RF_WrEn<='0';
-   PC_Sel<='0';
-   ImmExt<="01";
-   ByteOp<='0';
-   Mem_WrEn<='0';
-   
-   PC_LdEn<='1';--new instruction 
-   wait for clk_period;
-   
-   PC_LdEn<='0'; --instruction with diff control signals incoming
+   -- expect to see 15 in r2
+   --allows data to be altered during the excution cycle
    RF_WrEn<='1';
+
+   --fetches next instruction
+   PC_LdEn<='1'; 
    wait for clk_period;
    
-   
-   
-   --b -3
+   -- b control signals
    RF_B_sel<='1';
    ALU_Bin_sel<='0';
    ALU_func<="0001";
@@ -304,23 +335,45 @@ port map(
    ByteOp<='0';
    Mem_WrEn<='0';
    
-   PC_LdEn<='1';--new instruction 
+   --hold the instruction for one more clock cycle for its excecution.
+   PC_LdEn<='0';
    wait for clk_period;
-   
+   --instruction excecution 
+   --b -3
+   --branches to the previous beq command
+
+   -- allows the change of value of PC based on the branch command arguments
    PC_Sel<='1';
+   --fetches next instruction
+   PC_LdEn<='1';
    wait for clk_period;
    
-   
-   
-   --beq instruction that failed, succeeds now
-   
-   PC_LdEn<='1';--new instruction 
-   ---------------------------------
-   wait for clk_period;
-   
+   --beq control signals
+   RF_B_sel<='1';
+   ALU_Bin_sel<='0';
+   ALU_func<="0001";
+   RF_WrData_sel<='0';
+   RF_WrEn<='0';
+   PC_Sel<='0';
+   ImmExt<="10";
+   ByteOp<='0';
+   Mem_WrEn<='0';
+
+   --hold the instruction for one more clock cycle for its excecution.
    PC_LdEn<='0';
    wait for clk_period;
+   --instruction excecution 
+   --beq r2,r3,x0002 now succeeds since r2==r3
+   --branches to a sw instruction , which is the next instruction after the previous branch command
+
+   -- allows the change of value of PC based on the branch command arguments
+   PC_Sel<='1';
+
+   --fetches next instruction
+   PC_LdEn<='1';
+   wait for clk_period;
    
+   --sw control signals
    RF_B_sel<='1';
    ALU_Bin_sel<='1';
    ALU_func<="0000";
@@ -329,34 +382,24 @@ port map(
    PC_Sel<='0';
    ImmExt<="01";
    ByteOp<='0';
+   --Actually Mem_WrEn<='1' but Mem_WrEn<='0' to prevent the control signals cycle from writting garbage data in the memory
+   Mem_WrEn<='0';
+
+   --hold the instruction for one more clock cycle for its excecution.
+   PC_LdEn<='0';
+   wait for clk_period;
+
+   --instruction excecution 
+   --sw r1,15(r3) expected to store 5 in the address given as an argument
+
+   --allows data to be altered during the excution cycle
    Mem_WrEn<='1';
-   
-   PC_LdEn<='1';
-   
-   wait for clk_period;
-   
-   Mem_WrEn<='0';
-   PC_LdEn<='0';
-   wait for clk_period;
-   
-   RF_B_sel<='1';
-   ALU_Bin_sel<='1';
-   ALU_func<="0000";
-   RF_WrData_sel<='1';
-   RF_WrEn<='1';
-   PC_Sel<='0';
-   ImmExt<="01";
-   ByteOp<='0';
-   Mem_WrEn<='0';
-   
+
+   --fetches next instruction
    PC_LdEn<='1';
    wait for clk_period;
    
-   RF_WrEn<='0';
-   PC_LdEn<='0';
-   wait for clk_period;
-   
-   --sb
+   --sb control signals
    RF_B_sel<='1';
    ALU_Bin_sel<='1';
    ALU_func<="0000";
@@ -365,43 +408,72 @@ port map(
    PC_Sel<='0';
    ImmExt<="01";
    ByteOp<='1';
+   --Actually Mem_WrEn<='1' but Mem_WrEn<='0' to prevent the control signals cycle from writting garbage data in the memory
+   Mem_WrEn<='0';
+   --hold the instruction for one more clock cycle for its excecution.
+   PC_LdEn<='0';
+   wait for clk_period;
+   --instruction excecution 
+   --sb r3,-10(r3) expected to store 15 in the address given as an argument
+
+   --allows data to be altered during the excution cycle
    Mem_WrEn<='1';
-   
+
+   --fetches next instruction
    PC_LdEn<='1';
    wait for clk_period;
    
+   --lw control signals
+   RF_B_sel<='1';
+   ALU_Bin_sel<='1';
+   ALU_func<="0000";
+   RF_WrData_sel<='1';
+   RF_WrEn<='0';
+   PC_Sel<='0';
+   ImmExt<="01";
+   ByteOp<='0';
    Mem_WrEn<='0';
+
+   --hold the instruction for one more clock cycle for its excecution.
    PC_LdEn<='0';
    wait for clk_period;
+   --instruction excecution 
+   --lw r5,15(r3) loads number 5 in register r5
+
+   --allows data to be altered during the excution cycle
+   RF_WrEn<='1';
+   --fetches next instruction
+   PC_LdEn<='1';
+   wait for clk_period;
    
-   --lb
+   --lb control signals
    
    RF_B_sel<='1';
    ALU_Bin_sel<='1';
    ALU_func<="0000";
    RF_WrData_sel<='1';
-   RF_WrEn<='1';
+   RF_WrEn<='0';
    PC_Sel<='0';
    ImmExt<="01";
    ByteOp<='1';
    Mem_WrEn<='0';
-   
-   PC_LdEn<='1';
-   wait for clk_period;
-   
-   
-   RF_WrEn<='0';
+
+   --hold the instruction for one more clock cycle for its excecution.
    PC_LdEn<='0';
+   wait for clk_period;
+   --Last instruction excecution 
+   --lb r5,-10(r3)
+   --loads number 15 in register r5 
+
+   --allows data to be altered during the excution cycle
+   RF_WrEn<='1';
+   PC_LdEn<='1';
    wait for clk_period;
    
    
    
    wait;
    end process;
-   
-   
-   
-   
    
 
 end Behavioral;
