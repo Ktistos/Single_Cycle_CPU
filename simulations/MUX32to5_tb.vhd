@@ -1,43 +1,12 @@
---------------------------------------------------------------------------------
--- Company: 
--- Engineer:
---
--- Create Date:   19:48:59 02/27/2020
--- Design Name:   
--- Module Name:   /home/dbanelas/Documents/14.7/ISE_DS/CPU_wannabe/mux_tb.vhd
--- Project Name:  CPU_wannabe
--- Target Device:  
--- Tool versions:  
--- Description:   
--- 
--- VHDL Test Bench Created by ISE for module: MUX32to5
--- 
--- Dependencies:
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
---
--- Notes: 
--- This testbench has been automatically generated using types std_logic and
--- std_logic_vector for the ports of the unit under test.  Xilinx recommends
--- that these types always be used for the top-level I/O of a design in order
--- to guarantee that the testbench will bind correctly to the post-implementation 
--- simulation model.
---------------------------------------------------------------------------------
+
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
- 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---USE ieee.numeric_std.ALL;
  
 ENTITY mux_tb IS
 END mux_tb;
  
 ARCHITECTURE behavior OF mux_tb IS 
  
-    -- Component Declaration for the Unit Under Test (UUT)
  
     COMPONENT MUX32to5
     PORT(
@@ -115,11 +84,7 @@ ARCHITECTURE behavior OF mux_tb IS
    signal Ard : std_logic_vector(4 downto 0) := (others => '0');
 
  	--Outputs
-   signal DataOUT : std_logic_vector(31 downto 0);
-   -- No clocks detected in port list. Replace <clock> below with 
-   -- appropriate port name 
- 
-   
+   signal DataOUT : std_logic_vector(31 downto 0);  
  
 BEGIN
  
@@ -169,167 +134,167 @@ BEGIN
    begin		
       -- hold reset state for 100 ns.
       wait for 100 ns;	
---script generated tb, values in Dout are the same as values in ard so that we can verify that the circuit is correct
-      Dout0<="00000000000000000000000000000000";
-Dout1<="00000000000000000000000000000001";
-Dout2<="00000000000000000000000000000010";
-Dout3<="00000000000000000000000000000011";
-Dout4<="00000000000000000000000000000100";
-Dout5<="00000000000000000000000000000101";
-Dout6<="00000000000000000000000000000110";
-Dout7<="00000000000000000000000000000111";
-Dout8<="00000000000000000000000000001000";
-Dout9<="00000000000000000000000000001001";
-Dout10<="00000000000000000000000000001010";
-Dout11<="00000000000000000000000000001011";
-Dout12<="00000000000000000000000000001100";
-Dout13<="00000000000000000000000000001101";
-Dout14<="00000000000000000000000000001110";
-Dout15<="00000000000000000000000000001111";
-Dout16<="00000000000000000000000000010000";
-Dout17<="00000000000000000000000000010001";
-Dout18<="00000000000000000000000000010010";
-Dout19<="00000000000000000000000000010011";
-Dout20<="00000000000000000000000000010100";
-Dout21<="00000000000000000000000000010101";
-Dout22<="00000000000000000000000000010110";
-Dout23<="00000000000000000000000000010111";
-Dout24<="00000000000000000000000000011000";
-Dout25<="00000000000000000000000000011001";
-Dout26<="00000000000000000000000000011010";
-Dout27<="00000000000000000000000000011011";
-Dout28<="00000000000000000000000000011100";
-Dout29<="00000000000000000000000000011101";
-Dout30<="00000000000000000000000000011110";
-Dout31<="00000000000000000000000000011111";
- 
-wait for 25ns;
- 
-Ard<="00000";
- 
-wait for 25ns;
- 
-Ard<="00001";
- 
-wait for 25ns;
- 
-Ard<="00010";
- 
-wait for 25ns;
- 
-Ard<="00011";
- 
-wait for 25ns;
- 
-Ard<="00100";
- 
-wait for 25ns;
- 
-Ard<="00101";
- 
-wait for 25ns;
- 
-Ard<="00110";
- 
-wait for 25ns;
- 
-Ard<="00111";
- 
-wait for 25ns;
- 
-Ard<="01000";
- 
-wait for 25ns;
- 
-Ard<="01001";
- 
-wait for 25ns;
- 
-Ard<="01010";
- 
-wait for 25ns;
- 
-Ard<="01011";
- 
-wait for 25ns;
- 
-Ard<="01100";
- 
-wait for 25ns;
- 
-Ard<="01101";
- 
-wait for 25ns;
- 
-Ard<="01110";
- 
-wait for 25ns;
- 
-Ard<="01111";
- 
-wait for 25ns;
- 
-Ard<="10000";
- 
-wait for 25ns;
- 
-Ard<="10001";
- 
-wait for 25ns;
- 
-Ard<="10010";
- 
-wait for 25ns;
- 
-Ard<="10011";
- 
-wait for 25ns;
- 
-Ard<="10100";
- 
-wait for 25ns;
- 
-Ard<="10101";
- 
-wait for 25ns;
- 
-Ard<="10110";
- 
-wait for 25ns;
- 
-Ard<="10111";
- 
-wait for 25ns;
- 
-Ard<="11000";
- 
-wait for 25ns;
- 
-Ard<="11001";
- 
-wait for 25ns;
- 
-Ard<="11010";
- 
-wait for 25ns;
- 
-Ard<="11011";
- 
-wait for 25ns;
- 
-Ard<="11100";
- 
-wait for 25ns;
- 
-Ard<="11101";
- 
-wait for 25ns;
- 
-Ard<="11110";
- 
-wait for 25ns;
- 
-Ard<="11111";
+--checking whether the multiplexer can provide all the possible outputs based on the Ard input
+        Dout0<="00000000000000000000000000000000";
+	Dout1<="00000000000000000000000000000001";
+	Dout2<="00000000000000000000000000000010";
+	Dout3<="00000000000000000000000000000011";
+	Dout4<="00000000000000000000000000000100";
+	Dout5<="00000000000000000000000000000101";
+	Dout6<="00000000000000000000000000000110";
+	Dout7<="00000000000000000000000000000111";
+	Dout8<="00000000000000000000000000001000";
+	Dout9<="00000000000000000000000000001001";
+	Dout10<="00000000000000000000000000001010";
+	Dout11<="00000000000000000000000000001011";
+	Dout12<="00000000000000000000000000001100";
+	Dout13<="00000000000000000000000000001101";
+	Dout14<="00000000000000000000000000001110";
+	Dout15<="00000000000000000000000000001111";
+	Dout16<="00000000000000000000000000010000";
+	Dout17<="00000000000000000000000000010001";
+	Dout18<="00000000000000000000000000010010";
+	Dout19<="00000000000000000000000000010011";
+	Dout20<="00000000000000000000000000010100";
+	Dout21<="00000000000000000000000000010101";
+	Dout22<="00000000000000000000000000010110";
+	Dout23<="00000000000000000000000000010111";
+	Dout24<="00000000000000000000000000011000";
+	Dout25<="00000000000000000000000000011001";
+	Dout26<="00000000000000000000000000011010";
+	Dout27<="00000000000000000000000000011011";
+	Dout28<="00000000000000000000000000011100";
+	Dout29<="00000000000000000000000000011101";
+	Dout30<="00000000000000000000000000011110";
+	Dout31<="00000000000000000000000000011111";
+
+	wait for 25ns;
+
+	Ard<="00000";
+
+	wait for 25ns;
+
+	Ard<="00001";
+
+	wait for 25ns;
+
+	Ard<="00010";
+
+	wait for 25ns;
+
+	Ard<="00011";
+
+	wait for 25ns;
+
+	Ard<="00100";
+
+	wait for 25ns;
+
+	Ard<="00101";
+
+	wait for 25ns;
+
+	Ard<="00110";
+
+	wait for 25ns;
+
+	Ard<="00111";
+
+	wait for 25ns;
+
+	Ard<="01000";
+
+	wait for 25ns;
+
+	Ard<="01001";
+
+	wait for 25ns;
+
+	Ard<="01010";
+
+	wait for 25ns;
+
+	Ard<="01011";
+
+	wait for 25ns;
+
+	Ard<="01100";
+
+	wait for 25ns;
+
+	Ard<="01101";
+
+	wait for 25ns;
+
+	Ard<="01110";
+
+	wait for 25ns;
+
+	Ard<="01111";
+
+	wait for 25ns;
+
+	Ard<="10000";
+
+	wait for 25ns;
+
+	Ard<="10001";
+
+	wait for 25ns;
+
+	Ard<="10010";
+
+	wait for 25ns;
+
+	Ard<="10011";
+
+	wait for 25ns;
+
+	Ard<="10100";
+
+	wait for 25ns;
+
+	Ard<="10101";
+
+	wait for 25ns;
+
+	Ard<="10110";
+
+	wait for 25ns;
+
+	Ard<="10111";
+
+	wait for 25ns;
+
+	Ard<="11000";
+
+	wait for 25ns;
+
+	Ard<="11001";
+
+	wait for 25ns;
+
+	Ard<="11010";
+
+	wait for 25ns;
+
+	Ard<="11011";
+
+	wait for 25ns;
+
+	Ard<="11100";
+
+	wait for 25ns;
+
+	Ard<="11101";
+
+	wait for 25ns;
+
+	Ard<="11110";
+
+	wait for 25ns;
+
+	Ard<="11111";
 
 
       wait;
